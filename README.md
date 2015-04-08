@@ -19,8 +19,8 @@ Currently Inbox to Printer checks an inbox, prints all email, and deletes the em
 * Ensure that your system is running a version of Ruby between v1.8.7 and v2.1
 * Ensure that Bundler is installed on your system
 * Clone this repo to your system
-* Open the cloned directory and run "bundle" to install all required gems
-* Setup the conf.rb file
+* Open the cloned directory and run "bundle install" to install all required gems
+* Edit the conf.rb file to fit your needs
 * Run inbox-to-printer.rb
 
 ##Configuration Options
