@@ -3,6 +3,12 @@ Inbox To Printer is a simple Ruby utility to help accomplish the task of automat
 
 Currently Inbox to Printer checks an inbox, prints all email, and deletes the email after printing. E-Mails that are not printed because of the blacklist will be deleted as well. 
 
+##Usage
+ruby inbox-to-printer.rb [options]
+
+* Options
+ * --verbose, -v - Write log output to STDOUT
+
 ##Current features
 * Ability to check multiple email inboxes and print all emails from each inbox. Each inbox:
  * will only print email from senders on a whitelist. To whitelist all senders simply whitelist "." (wildcard)
