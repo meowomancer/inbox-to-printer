@@ -22,6 +22,8 @@ ruby inbox-to-printer.rb [options]
 * Printer installed to the server/system and connected to the [lp system](http://www.cups.org/documentation.php/options.html)
 
 ##Setup
+[Detailed install and setup information can be found here.](https://github.com/zyamada/inbox-to-printer/wiki/Detailed-Install)
+
 * Ensure that your system has all of the following installed:
  * Ruby (version >= 1.8.7 && <= 2.1)
  * Bundler
@@ -37,16 +39,7 @@ ruby inbox-to-printer.rb [options]
 * Run inbox-to-printer.rb
 
 ##Configuration Options
-All configuration takes place inside of conf.rb. Current configurables are:
-* **$delay** - (int) The time between checking inboxes in seconds
-* **@inboxes** - This array contains hash tables for each inbox that you would like to check. Each hash table has the following key value pairs:
- * **:host** - (string) The address of the IMAP server
- * **:port** - (string) The TLS port of the IMAP server
- * **:user** - (string) The username of the email inbox
- * **:pass** - (string) The password of the email inbox
- * **:printer** - (string) The name of the printer, as reported by 'lpstat -p', to print email from this account to
- * **:valid_senders** - (string, arr) An array containing regex compatible strings to match againt from addresses. Only emails from addresses matching this string. If both valid\_senders and invalid\_subjects are empty, then all email will be printed.
- * **:invalid_subjects** - (string, arr) An array containing regex compatible strings to match against subjects. E-mails with subjects matching any of these expres. If both valid\_senders and invalid\_subjects are empty, then all email will be printed.
+[Detailed configuration options information can be found here.](https://github.com/zyamada/inbox-to-printer/wiki/Detailed-Configuration)
 
 ##Example configuration
     $delay = 15
