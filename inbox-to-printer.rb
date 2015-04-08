@@ -38,7 +38,11 @@ while true
 					envelope.subject =~ /#{regex_sub}/ ? valid = false : false;
 				end
 
-				#If sender is valid, proceed to print
+				if mailserver[:valid_senders].length == 0 && mailserver[:invalid_subjects].length == 0
+					valid = true
+				end
+
+				#If sender and subject is valid, proceed to print
 				if valid
 					
 					#Grab the body of the email

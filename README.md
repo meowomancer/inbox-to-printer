@@ -25,15 +25,15 @@ Currently Inbox to Printer checks an inbox, prints all email, and deletes the em
 
 ##Configuration Options
 All configuration takes place inside of conf.rb. Current configurables are:
-* **$delay** - The time between checking inboxes in seconds
+* **$delay** - (int) The time between checking inboxes in seconds
 * **@inboxes** - This array contains hash tables for each inbox that you would like to check. Each hash table has the following key value pairs:
- * **:host** - The address of the IMAP server
- * **:port** - The TLS port of the IMAP server
- * **:user** - The username of the email inbox
- * **:pass** - The password of the email inbox
- * **:printer** - The name of the printer, as reported by 'lpstat -p', to print email from this account to
- * **:valid_senders** - An array containing regex compatible strings to match againt from addresses. Only emails from addresses matching this string
- * **:invalid_subject** - An array containing regex compatible strings to match against subjects. E-mails with subjects matching any of these expres
+ * **:host** - (string) The address of the IMAP server
+ * **:port** - (string) The TLS port of the IMAP server
+ * **:user** - (string) The username of the email inbox
+ * **:pass** - (string) The password of the email inbox
+ * **:printer** - (string) The name of the printer, as reported by 'lpstat -p', to print email from this account to
+ * **:valid_senders** - (string, arr) An array containing regex compatible strings to match againt from addresses. Only emails from addresses matching this string. If both valid\_senders and invalid\_subjects are empty, then all email will be printed.
+ * **:invalid_subjects** - (string, arr) An array containing regex compatible strings to match against subjects. E-mails with subjects matching any of these expres. If both valid\_senders and invalid\_subjects are empty, then all email will be printed.
 
 ##Example configuration
     $delay = 15
