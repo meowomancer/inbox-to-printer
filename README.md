@@ -22,7 +22,7 @@ ruby inbox-to-printer.rb [options]
 * Printer installed to the server/system and connected to the [lp system](http://www.cups.org/documentation.php/options.html)
 
 ##Setup
-* Ensure that your system has all of the following installed running a version of Ruby between v1.8.7 and v2.1
+* Ensure that your system has all of the following installed:
  * Ruby (version >= 1.8.7 && <= 2.1)
  * Bundler
  * cups
