@@ -11,18 +11,23 @@ options = {}
 OptionParser.new do |opts|
 	opts.banner = "Usage: inbox-to-mail.rb [options]"
 	opts.on("-v", "--verbose", "Run verbosely") do |v|
-		options[:v] = v
+		options[:v] = true
 	end
 end.parse!
 
 #Helper function for logging to STD (and eventually file)
 def log(msg, options)
 	if msg == ""
-		print "\n"
+		if options [:v] then print "\n" end
 	else
 		time = Time.new	
 		output = time.strftime("%b  %d %H:%M:%S")+" "+msg+"\n"
-		if options[:v] then print output end
+		log_file = open("app.log", 'a')
+		log_file.write output
+		log_file.close
+		if options[:v] 
+			print output 
+		end
 	end
 end
 
@@ -85,7 +90,7 @@ while true
 						end
 
 						#Print email
-						log "Attempting to print email...", otions
+						log "Attempting to print email...", options
 						if system("lpr -P "+mailserver[:printer]+" "+file_path) 
 							log 'Email printed successfully', options
 							imap.store(msg_id, "+FLAGS", [:Deleted]);
