@@ -1,8 +1,13 @@
 # Inbox To Printer
-Inbox To Printer is a simple ruby utility to help accomplish the task of automatically printing recieved e-mails. This project was started to replace the functionality of an extremly buggy piece of software used at Chemeketa Community Co
-llege. Currently this system can connect to any IMAP server with TLS support.
+Inbox To Printer is a simple Ruby utility to help accomplish the task of automatically printing recieved e-mails. This project was started to replace the functionality of an extremly buggy piece of software used at Chemeketa Community College. Currently this system can connect to any IMAP server with TLS support.
 
-Currently Inbox to Printer checks an inbox, prints all email, and deletes the email after printing. 
+Currently Inbox to Printer checks an inbox, prints all email, and deletes the email after printing. E-Mails that are not printed because of the blacklist will be deleted as well. 
+
+##Current features
+* Ability to check multiple email inboxes and print all emails from each inbox. Each inbox:
+ * will only print email from senders on a whitelist. To whitelist all senders simply whitelist "." (wildcard)
+ * will not print emails with terms in their subject lines from the black list
+ * will print only to the specified printer
 
 ##Requirements
 * Linux based host system
@@ -26,6 +31,9 @@ All configuration takes place inside of conf.rb. Current configurables are:
  * **:port** - The TLS port of the IMAP server
  * **:user** - The username of the email inbox
  * **:pass** - The password of the email inbox
+ * **:printer** - The name of the printer, as reported by 'lpstat -p', to print email from this account to
+ * **:valid_senders** - An array containing regex compatible strings to match againt from addresses. Only emails from addresses matching this string
+ * **:invalid_subject** - An array containing regex compatible strings to match against subjects. E-mails with subjects matching any of these expres
 
 ##Example configuration
     $delay = 15
@@ -35,21 +43,23 @@ All configuration takes place inside of conf.rb. Current configurables are:
             :port => "993",
             :user => "user01",
             :pass => "somepassword",
+            :printer => "HP-Color-LaserJet-3800",
+            :valid_senders => ["emailaccount@example.com","@gmail.com$"],
+            :invalid_subject => ["drugs", ".iagra", "free"]
         },
         {
             :host  => "imap.example.com",
             :port => "993",
             :user => "user02",
             :pass => "somepassword",
+            :printer => "HP-Color-LaserJet-3800",
+            :valid_senders => ["ourschool.edu$"],
+            :invalid_subject => []
         }
     ]
 
-##Current features
-Ability to check an email inbox and print all email
 
 ##Upcoming features
 * Google OAUTH for gmail accounts
 * Non TLS server support
-* Specify seperate printers for seperate inboxes
-* Whitelist for email address
-
+* Multi-threading to check inboxes simultaneously
