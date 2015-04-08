@@ -109,6 +109,9 @@ while true
 			#Close connection
 			imap.close()
 		
+			#Disconnect from server
+			imap.disconnect()
+		
 			sleep($delay)
 		rescue Net::IMAP::NoResponseError
 			log "Could not log into IMAP server", options
