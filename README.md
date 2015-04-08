@@ -22,8 +22,15 @@ ruby inbox-to-printer.rb [options]
 * Printer installed to the server/system and connected to the [lp system](http://www.cups.org/documentation.php/options.html)
 
 ##Setup
-* Ensure that your system is running a version of Ruby between v1.8.7 and v2.1
-* Ensure that Bundler is installed on your system
+* Ensure that your system has all of the following installed running a version of Ruby between v1.8.7 and v2.1
+ * Ruby (version >= 1.8.7 && <= 2.1)
+ * Bundler
+ * cups
+ * cups-client
+ * make 
+ * build-essential
+ * zlibc
+ * zlib-dev
 * Clone this repo to your system
 * Open the cloned directory and run "bundle install" to install all required gems
 * Edit the conf.rb file to fit your needs
