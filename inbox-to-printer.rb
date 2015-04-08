@@ -91,7 +91,7 @@ while true
 
 						#Print email
 						log "Attempting to print email...", options
-						if system("lpr -P "+mailserver[:printer]+" "+file_path) 
+						if system("lp -d "+mailserver[:printer]+" "+file_path) 
 							log 'Email printed successfully', options
 							imap.store(msg_id, "+FLAGS", [:Deleted]);
 						else
