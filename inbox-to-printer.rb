@@ -76,18 +76,14 @@ while true
 					log "Checking #{envelope.subject} from #{sender}", "info", options
 
 					#Check if sender is whitelisted
-					valid = false
+					valid = true
 					mailserver[:valid_senders].each do |regex_addr| 				
-						sender =~ /#{regex_addr}/ ? valid = true : false 
+						sender =~ /#{regex_addr}/ ? valid = true : valid = false 
 					end
 
 					#Check if subject term is blacklisted
 					mailserver[:invalid_subjects].each do |regex_sub|
 						envelope.subject =~ /#{regex_sub}/ ? valid = false : false;
-					end
-
-					if mailserver[:valid_senders].length == 0 && mailserver[:invalid_subjects].length == 0
-						valid = true
 					end
 
 					#If sender and subject is valid, proceed to print
@@ -115,7 +111,7 @@ while true
 							log 'Could not print email. Will try again next time.', "error", options
 						end
 					else
-						log "E-Mail from #{sender} with subject \"#{envelope.subject}\" failed to match whitelist rules, or matched blacklist rules", "error", options
+						log "E-Mail from #{sender} with subject \"#{envelope.subject}\" did not meet filter critera", "error", options
 						imap.store(msg_id, "+FLAGS", [:Deleted]);
 					end
 				end	
