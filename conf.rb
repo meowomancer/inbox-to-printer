@@ -1,3 +1,4 @@
+$speedup = true
 $delay = 15 
 
 @inboxes = [

@@ -31,6 +31,11 @@ def log(msg, options)
 	end
 end
 
+if $speedup
+	default_delay = $delay
+	$delay += 1
+end
+
 log "Inbox to Printer Started", options
 
 while true
@@ -112,15 +117,20 @@ while true
 			#Disconnect from server
 			imap.disconnect()
 		
-			sleep($delay)
 		rescue Net::IMAP::NoResponseError
 			log "Could not log into IMAP server", options
 			log "", options
-			sleep($delay)
+			$delay = default_delay	
 		rescue Errno::ECONNREFUSED
 			log "Could not connect to IMAP server", options
 			log "", options
-			sleep($delay)
+			$delay = default_delay
+		else
+			
+			#If inbox was sucessfully checked and the user opts to use slow start we reduce the delay time
+			if $speedup && $delay > 0 then $delay -= 1 end	
 		end
+
+		sleep($delay)
 	end
 end
