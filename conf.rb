@@ -3,6 +3,11 @@
 # found at https://github.com/zyamada/inbox-to-printer/wiki/Detailed-Configuration
 #####
 
+# Can be set to either "all", "error", "none". If set to "all", all activity will
+# be written to the log file. If set to "error", only errors will be written to the
+# log file. If set to "none", nothing will be written to the log file
+$log_level = "error"
+
 # If this value is true, then the program will slowly decrease the amount of
 # delay between checking inboxes until there is no delay between going from
 # one inbox to another. If an error is encoutered the delay is reset to its
@@ -32,5 +37,6 @@ $delay = 15
 		:printer => "",
 		:valid_senders => [],
 		:invalid_subjects => []
-	}
+	},
+
 ]

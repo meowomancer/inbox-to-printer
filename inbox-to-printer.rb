@@ -16,18 +16,30 @@ OptionParser.new do |opts|
 end.parse!
 
 #Helper function for logging to STD (and eventually file)
-def log(msg, options)
-	if msg == ""
-		if options [:v] then print "\n" end
-	else
-		time = Time.new	
-		output = time.strftime("%b  %d %H:%M:%S")+" "+msg+"\n"
-		log_file = open("app.log", 'a')
-		log_file.write output
-		log_file.close
-		if options[:v] 
-			print output 
+def log(msg, level, options)
+	time = Time.new	
+	output = time.strftime("%b  %d %H:%M:%S")+" "+msg+"\n"
+
+	#Log to console if -v flag is in use
+	if options[:v] 
+		if msg == ""
+			if options [:v] then print "\n" end
+		else
+			print output
 		end
+	end
+
+		
+	if $log_level != "none" && msg != ""
+		log_file = open("app.log", 'a')
+
+		if $log_level == "all" ||
+		   $log_level == level ||
+		   level == "system" 
+			log_file.write output
+		end 
+
+		log_file.close
 	end
 end
 
@@ -36,17 +48,17 @@ if $speedup
 	$delay += 1
 end
 
-log "Inbox to Printer Started", options
+log "Inbox to Printer Started", "system", options
 
 while true
 	@inboxes.each do |mailserver|
 		begin
 			#Create IMAP object and connect to remote server
-			log 'Attempting to connect to '+mailserver[:host]+':'+mailserver[:port], options
+			log "Attempting to connect to #{mailserver[:host]}:#{mailserver[:port]}", "info", options
 			imap = Net::IMAP.new(mailserver[:host],{:port=>mailserver[:port],:ssl=>true})
 
 			#Authenticate against the remote server
-			log "Attempting to authenticate user: "+mailserver[:user], options
+			log "Attempting to authenticate user: #{mailserver[:user]}", "info", options
 			imap.login(mailserver[:user], mailserver[:pass])
 
 			#Select the inbox
@@ -60,8 +72,8 @@ while true
 				for msg_id in 1..data["MESSAGES"]
 					#Get sender information
 					envelope  = imap.fetch(msg_id, 'ENVELOPE')[0].attr['ENVELOPE']
-					sender = "#{envelope.from[0].mailbox}"+"@"+"#{envelope.from[0].host}"
-					log "Checking #{envelope.subject} from " + sender, options
+					sender = "#{envelope.from[0].mailbox}@#{envelope.from[0].host}"
+					log "Checking #{envelope.subject} from #{sender}", "info", options
 
 					#Check if sender is whitelisted
 					valid = false
@@ -86,7 +98,7 @@ while true
 						mail = Mail.read_from_string msg
 
 						#Convert email to PDF
-						log "Preparing to print email", options
+						log "Preparing to print email", "info", options
 						mail_body = mail.html_part.body.to_s
 						pdf = WickedPdf.new.pdf_from_string(mail_body)
 						file_path = Dir.pwd+"/out.pdf"
@@ -95,20 +107,20 @@ while true
 						end
 
 						#Print email
-						log "Attempting to print email...", options
+						log "Attempting to print email...", "info", options
 						if system("lp -d "+mailserver[:printer]+" "+file_path) 
-							log 'Email printed successfully', options
+							log 'Email printed successfully', "info", options
 							imap.store(msg_id, "+FLAGS", [:Deleted]);
 						else
-							log 'Could not print email. Will try again next time.', options
+							log 'Could not print email. Will try again next time.', "error", options
 						end
 					else
-						log "E-Mail failed to match whitelist rules, or matched blacklist rules", options
+						log "E-Mail from #{sender} with subject \"#{envelope.subject}\" failed to match whitelist rules, or matched blacklist rules", "error", options
 						imap.store(msg_id, "+FLAGS", [:Deleted]);
 					end
 				end	
 			else
-				log "No new messages", options
+				log "No new messages", "info", options
 			end	
 
 			#Close connection
@@ -118,19 +130,18 @@ while true
 			imap.disconnect()
 		
 		rescue Net::IMAP::NoResponseError
-			log "Could not log into IMAP server", options
-			log "", options
+			log "Could not log into IMAP server", "error", options
+			log "", "info", options
 			$delay = default_delay	
 		rescue Errno::ECONNREFUSED
-			log "Could not connect to IMAP server", options
-			log "", options
+			log "Could not connect to IMAP server", "error", options
+			log "", "info", options
 			$delay = default_delay
 		else
 			
 			#If inbox was sucessfully checked and the user opts to use slow start we reduce the delay time
 			if $speedup && $delay > 0 then $delay -= 1 end	
 		end
-
 		sleep($delay)
 	end
 end
