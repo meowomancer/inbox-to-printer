@@ -42,6 +42,7 @@ ruby inbox-to-printer.rb [options]
 [Detailed configuration options information can be found here.](https://github.com/zyamada/inbox-to-printer/wiki/Detailed-Configuration)
 
 ##Example configuration
+    $speedup = true
     $delay = 15
     @inboxes = [
         {
