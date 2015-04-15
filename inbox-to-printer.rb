@@ -150,7 +150,7 @@ while true
 			log "", "info", options
 			$delay = default_delay
 		rescue Net::IMAP::FlagCountError
-			log "IMAP server returned too much data.", "error", options
+			log "IMAP server returned too much data or too many flags.", "error", options
 			log "", "info", options
 			$delay = default_delay
 		else
