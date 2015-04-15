@@ -125,12 +125,32 @@ while true
 			#Disconnect from server
 			imap.disconnect()
 		
+		rescue SocketError
+			log "Could not connect to the internet.", "error", options
+			log "", "info", options
+			$delay = default_delay
+		rescue Errno::ECONNREFUSED
+			log "Could not connect to IMAP server.", "error", options
+			log "", "info", options
+			$delay = default_delay
 		rescue Net::IMAP::NoResponseError
-			log "Could not log into IMAP server", "error", options
+			log "Could not log into IMAP server.", "error", options
 			log "", "info", options
 			$delay = default_delay	
-		rescue Errno::ECONNREFUSED
-			log "Could not connect to IMAP server", "error", options
+		rescue Net::IMAP::ByeResponseError
+			log "IMAP server closed the connection unexpectedly.", "error", options
+			log "", "info", options
+			$delay = default_delay
+		rescue Net::IMAP::BadResponseError
+			log "IMAP server recieved malformed or incorrect commands.", "error", options
+			log "", "info", options
+			$delay = default_delay
+		rescue Net::IMAP::ResponseParseError
+			log "Could not parse data received from IMAP server.", "error", options
+			log "", "info", options
+			$delay = default_delay
+		rescue Net::IMAP::FlagCountError
+			log "IMAP server returned too much data.", "error", options
 			log "", "info", options
 			$delay = default_delay
 		else
